@@ -91,12 +91,12 @@ def to_bytes(arr):
         num2byte(ret, idx + 4, arr[i][1])
         num2byte(ret, idx + 8, arr[i][2])
         idx += 12
-    return ret
+    return ret[:idx]
 
 
 balls = [[randint(10, 100) for i in range(3)] for j in range(randint(5, 15))]
+
 def update_net():
-    print("UN begin")
     i = 0 
     while i < len(clients):
         if (time.time() - clients[i][-1] > 15):
@@ -109,16 +109,17 @@ def update_net():
         if (not data):
             i += 1
             continue
+        clients[i][-1] = time.time()
         ask = data[0]
         Pretty(ask)
         if ask == ObjectsQuery:
-            conn.send(to_bytes(balls))
-            balls[0][0] = randint(10, 100)
+            length = randint(2, len(balls))
+            conn.send(to_bytes(balls[:length]))
+            balls[0][0] += 2
         i += 1
 
-    print("UN end")
 
 def free_net():
-    sock.shutdown()
+    sock.shutdown(socket.SHUT_RDWR)
     print("hey")
 

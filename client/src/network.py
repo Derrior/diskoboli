@@ -36,6 +36,7 @@ def byte2num(arr, i):
 def parse(arr, Type):
     ret = []
     if (Type == ObjectsQuery):
+
         ret = [0] * byte2num(arr, 0)
         idx = 4
         for i in range(len(ret)):
@@ -46,6 +47,6 @@ def parse(arr, Type):
 def get_objs():
     data[0] = ObjectsQuery
     sock.send(data[:1])
-    ans = get_data(sock, 1024 * 1024, 1)
-    return parse(ans, ObjectsQuery)
+    ans = get_data(sock, 1024, 1)
+    return parse(ans, ObjectsQuery), []
 
